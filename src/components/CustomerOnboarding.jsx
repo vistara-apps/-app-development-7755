@@ -48,48 +48,107 @@ const CustomerOnboarding = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <span className="text-4xl mb-4 block">⚔️</span>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to AgentArmy</h1>
-          <p className="text-gray-600">Let's set up your AI customer support team</p>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-success-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 dark:bg-primary-800/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-success-200/30 dark:bg-success-800/20 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="max-w-lg w-full relative z-10">
+        {/* Header */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-gray-800 rounded-2xl shadow-large mb-6 animate-scale-in">
+            <span className="text-4xl animate-pulse">⚔️</span>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3 text-balance">
+            Welcome to AgentArmy
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 text-balance">
+            Let's set up your AI customer support team
+          </p>
         </div>
 
-        <div className="card">
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-gray-500">Step {step} of 4</span>
-              <span className="text-sm text-gray-500">{Math.round((step / 4) * 100)}%</span>
+        {/* Main Card */}
+        <div className="card shadow-large animate-slide-up" style={{ animationDelay: '200ms' }}>
+          {/* Progress Section */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Step {step} of 4
+              </span>
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                {Math.round((step / 4) * 100)}% Complete
+              </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${(step / 4) * 100}%` }}
-              />
+            
+            {/* Enhanced Progress Bar */}
+            <div className="relative">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="bg-gradient-to-r from-primary-500 to-primary-600 h-3 rounded-full transition-all duration-500 ease-out relative"
+                  style={{ width: `${(step / 4) * 100}%` }}
+                >
+                  <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Step indicators */}
+              <div className="flex justify-between mt-2">
+                {[1, 2, 3, 4].map((stepNum) => (
+                  <div
+                    key={stepNum}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                      stepNum <= step
+                        ? 'bg-primary-500 text-white shadow-medium'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                    }`}
+                  >
+                    {stepNum <= step ? '✓' : stepNum}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {step === 1 && (
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Company Information</h2>
-              <div className="space-y-4">
+            <div className="animate-fade-in">
+              <div className="text-center mb-6">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🏢</span>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                  Company Information
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Tell us about your company to customize your experience
+                </p>
+              </div>
+              
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Company Name</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Company Name *
+                  </label>
                   <input
                     type="text"
                     className="input"
                     value={formData.companyName}
                     onChange={(e) => handleInputChange('companyName', e.target.value)}
                     placeholder="Enter your company name"
+                    required
                   />
                 </div>
+                
                 <div>
-                  <label className="block text-sm font-medium mb-2">Industry</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Industry *
+                  </label>
                   <select
                     className="input"
                     value={formData.industry}
                     onChange={(e) => handleInputChange('industry', e.target.value)}
+                    required
                   >
                     <option value="">Select your industry</option>
                     {industries.map(industry => (
@@ -97,12 +156,16 @@ const CustomerOnboarding = ({ onComplete }) => {
                     ))}
                   </select>
                 </div>
+                
                 <div>
-                  <label className="block text-sm font-medium mb-2">Company Size</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Company Size *
+                  </label>
                   <select
                     className="input"
                     value={formData.companySize}
                     onChange={(e) => handleInputChange('companySize', e.target.value)}
+                    required
                   >
                     <option value="">Select company size</option>
                     {companySizes.map(size => (
@@ -174,11 +237,18 @@ const CustomerOnboarding = ({ onComplete }) => {
             </div>
           )}
 
-          <div className="flex justify-between mt-6">
-            {step > 1 && (
-              <button onClick={prevStep} className="btn btn-secondary">
+          {/* Navigation */}
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            {step > 1 ? (
+              <button 
+                onClick={prevStep} 
+                className="btn btn-outline flex items-center gap-2 group"
+              >
+                <span className="group-hover:-translate-x-1 transition-transform duration-200">←</span>
                 Previous
               </button>
+            ) : (
+              <div></div>
             )}
             
             {step < 4 ? (
@@ -188,13 +258,19 @@ const CustomerOnboarding = ({ onComplete }) => {
                   (step === 1 && (!formData.companyName || !formData.industry || !formData.companySize)) ||
                   (step === 3 && !formData.supportVolume)
                 }
-                className="btn btn-primary ml-auto"
+                className="btn btn-primary flex items-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
+                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
               </button>
             ) : (
-              <button onClick={handleComplete} className="btn btn-success ml-auto">
+              <button 
+                onClick={handleComplete} 
+                className="btn btn-success flex items-center gap-2 group gradient-success"
+              >
+                <span>🚀</span>
                 Launch AgentArmy
+                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
               </button>
             )}
           </div>

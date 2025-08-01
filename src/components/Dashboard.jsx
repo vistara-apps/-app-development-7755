@@ -66,77 +66,147 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage your AI customer support team</p>
+    <div className="space-y-6 lg:space-y-8 animate-fade-in">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100">
+            Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage your AI customer support team
+          </p>
         </div>
-        <StartConversation onConversationStart={addConversation} />
+        <div className="flex-shrink-0">
+          <StartConversation onConversationStart={addConversation} />
+        </div>
       </div>
 
+      {/* Stats Section */}
       <QuickStats stats={stats} />
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+      {/* Main Content Grid */}
+      <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Conversations Section */}
+        <div className="lg:col-span-2 space-y-6">
           <ConversationList conversations={conversations} />
         </div>
         
+        {/* Sidebar */}
         <div className="space-y-6">
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">Active Agents</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="font-medium">Billing Agent</span>
-                </div>
-                <span className="text-sm text-gray-600">Available</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="font-medium">Technical Agent</span>
-                </div>
-                <span className="text-sm text-gray-600">Available</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="font-medium">Product Agent</span>
-                </div>
-                <span className="text-sm text-gray-600">Available</span>
+          {/* Active Agents Card */}
+          <div className="card animate-slide-up" style={{ animationDelay: '200ms' }}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Active Agents
+              </h3>
+              <div className="flex items-center gap-2">
+                <div className="status-dot status-online animate-pulse"></div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">All Online</span>
               </div>
             </div>
-            <Link to="/agents" className="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium">
-              Manage Agents →
+            
+            <div className="space-y-3">
+              {[
+                { name: 'Billing Agent', type: 'billing', conversations: 3 },
+                { name: 'Technical Agent', type: 'technical', conversations: 5 },
+                { name: 'Product Agent', type: 'product', conversations: 2 }
+              ].map((agent, index) => (
+                <div 
+                  key={agent.name}
+                  className="flex items-center justify-between p-4 bg-success-50 dark:bg-success-900/20 rounded-xl border border-success-200 dark:border-success-800 hover:bg-success-100 dark:hover:bg-success-900/30 transition-colors duration-200 group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="status-dot status-online"></div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-success-500 rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-success-700 dark:group-hover:text-success-300 transition-colors">
+                        {agent.name}
+                      </span>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {agent.conversations} active conversations
+                      </p>
+                    </div>
+                  </div>
+                  <div className="badge badge-success">
+                    Available
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <Link 
+              to="/agents" 
+              className="flex items-center justify-center gap-2 mt-6 p-3 text-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 rounded-lg transition-all duration-200 group"
+            >
+              <span>Manage Agents</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
             </Link>
           </div>
 
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-start space-x-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-gray-900">New conversation started</p>
-                  <p className="text-gray-500">2 minutes ago</p>
+          {/* Recent Activity Card */}
+          <div className="card animate-slide-up" style={{ animationDelay: '400ms' }}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Recent Activity
+              </h3>
+              <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                View All
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {[
+                {
+                  type: 'conversation',
+                  message: 'New conversation started',
+                  time: '2 minutes ago',
+                  color: 'primary',
+                  icon: '💬'
+                },
+                {
+                  type: 'resolution',
+                  message: 'Issue resolved by Technical Agent',
+                  time: '15 minutes ago',
+                  color: 'success',
+                  icon: '✅'
+                },
+                {
+                  type: 'escalation',
+                  message: 'Escalated to human supervisor',
+                  time: '1 hour ago',
+                  color: 'warning',
+                  icon: '⚠️'
+                },
+                {
+                  type: 'feedback',
+                  message: 'Customer rated 5 stars',
+                  time: '2 hours ago',
+                  color: 'success',
+                  icon: '⭐'
+                }
+              ].map((activity, index) => (
+                <div key={index} className="flex items-start gap-3 group">
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                    activity.color === 'primary' ? 'bg-primary-100 dark:bg-primary-900/30' :
+                    activity.color === 'success' ? 'bg-success-100 dark:bg-success-900/30' :
+                    activity.color === 'warning' ? 'bg-warning-100 dark:bg-warning-900/30' :
+                    'bg-gray-100 dark:bg-gray-800'
+                  }`}>
+                    {activity.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {activity.message}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      {activity.time}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-gray-900">Issue resolved by Technical Agent</p>
-                  <p className="text-gray-500">15 minutes ago</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-2">
-                <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
-                <div>
-                  <p className="text-gray-900">Escalated to human supervisor</p>
-                  <p className="text-gray-500">1 hour ago</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
